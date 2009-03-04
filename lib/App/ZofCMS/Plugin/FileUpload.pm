@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::FileUpload;
 use warnings;
 use strict;
 
-our $VERSION = '0.0101';
+our $VERSION = '0.0112';
 
 use File::Spec::Functions qw/catfile/;
 
@@ -60,6 +60,10 @@ sub _process_upload {
     $upload->{ext} = ''
         unless defined $upload->{ext};
 
+    if ( ref $upload->{name} eq 'CODE' ) {
+        $upload->{name} = $upload->{name}->( $template, $query, $config );
+    }
+
     if ( $upload->{name} eq '[rand]' ) {
         UNIQUE_NAME: {
             $upload->{name} = catfile(
@@ -97,6 +101,9 @@ sub _process_upload {
         $template->{t}{ $error_key } = $cgi->cgi_error;
         return;
     }
+
+    return
+        unless $fh;
 
     my $fh_out;
     unless ( open $fh_out, '>', $upload->{name} ) {
@@ -239,7 +246,11 @@ B<Optional>. Specifies the name (without the extension)
 of the local file into which save the uploaded file. Special value of
 C<[rand]> specifies that the name should be random, in which case it
 will be created by calling C<rand()> and C<time()> and removing any dots
-from the concatenation of those two. B<Defaults to:> C<[rand]>
+from the concatenation of those two. The C<name> parameter can also take a subref, if
+that's the case, then the C<name> parameter will obtain its value from the
+return value of that subref. The subref's C<@_> will contain the following (in that
+order): ZofCMS Template hashref, hashref of query parameters and L<App::ZofCMS::Config>
+object. B<Defaults to:> C<[rand]>
 
 =head3 C<ext>
 

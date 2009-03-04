@@ -1,5 +1,11 @@
 Revision history for App-ZofCMS-Plugin-FileUpload
 
+0.0112  December 7, 2008
+        Added an extra check that used to make the plugin die if upload field is not specified.
+
+0.0111  December 7, 2008
+        Added ability to give a subref for C<name> argument.
+
 0.0101  August 12, 2008
         First version, released on an unsuspecting world.
 
