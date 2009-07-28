@@ -3,7 +3,7 @@ package App::ZofCMS::Plugin::FileUpload;
 use warnings;
 use strict;
 
-our $VERSION = '0.0112';
+our $VERSION = '0.0113';
 
 use File::Spec::Functions qw/catfile/;
 
@@ -395,7 +395,7 @@ local file into which the upload was saved.
 =head1 AUTHOR
 
 Zoffix Znet, C<< <zoffix at cpan.org> >>
-(L<http://zoffix.com>, L<http://haslayout.net>)
+(L<http://zoffix.com>, L<http://haslayout.net>, L<http://zofdesign.com/>)
 
 =head1 BUGS
 
