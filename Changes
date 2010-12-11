@@ -1,5 +1,9 @@
 Revision history for App-ZofCMS-Plugin-FileUpload
 
+0.0114  December 10, 2010
+        Added an option to leave the uploaded filename at its original name (provided by the browser)
+        Added name_filter option
+
 0.0113  July 27, 2009
         Added my links
 

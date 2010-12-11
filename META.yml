@@ -1,24 +1,24 @@
 ---
-name: App-ZofCMS-Plugin-FileUpload
-version: 0.0113
+abstract: 'ZofCMS plugin to handle file uploads'
 author:
   - 'Zoffix Znet <zoffix@cpan.org>'
-abstract: ZofCMS plugin to handle file uploads
-license: perl
-resources:
-  license: http://dev.perl.org/licenses/
 build_requires:
   Test::More: 0
-requires:
-  App::ZofCMS: 0.0104
-  File::Spec::Functions: 3.2701
 configure_requires:
-  Module::Build: 0.34
-provides:
-  App::ZofCMS::Plugin::FileUpload:
-    file: lib/App/ZofCMS/Plugin/FileUpload.pm
-    version: 0.0113
-generated_by: Module::Build version 0.34
+  Module::Build: 0.36
+generated_by: 'Module::Build version 0.3607'
+license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
   version: 1.4
+name: App-ZofCMS-Plugin-FileUpload
+provides:
+  App::ZofCMS::Plugin::FileUpload:
+    file: lib/App/ZofCMS/Plugin/FileUpload.pm
+    version: 0.0114
+requires:
+  App::ZofCMS: 0.0104
+  File::Spec::Functions: 3.2701
+resources:
+  license: http://dev.perl.org/licenses/
+version: 0.0114

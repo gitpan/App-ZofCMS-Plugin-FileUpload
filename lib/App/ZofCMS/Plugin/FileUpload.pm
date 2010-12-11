@@ -3,9 +3,9 @@ package App::ZofCMS::Plugin::FileUpload;
 use warnings;
 use strict;
 
-our $VERSION = '0.0113';
+our $VERSION = '0.0114';
 
-use File::Spec::Functions qw/catfile/;
+use File::Spec::Functions qw/catfile  splitpath/;
 
 sub new { bless {}, shift }
 
@@ -74,11 +74,23 @@ sub _process_upload {
             redo UNIQUE_NAME if -e $upload->{name};
         }
     }
+    elsif ( ref $upload->{name} eq 'SCALAR' ) {
+        $upload->{name} = ( splitpath $remote_filename )[-1];
+        $upload->{name} =~ s/(?<=[^.])[.].+$//;
+        $upload->{name} = catfile(
+            $upload->{path},
+            $upload->{name} . $upload->{ext}
+        );
+    }
     else {
         $upload->{name} = catfile(
             $upload->{path},
             $upload->{name} . $upload->{ext}
         );
+    }
+    
+    if ( $upload->{name_filter} ) {
+        $upload->{name} =~ s/$upload->{name_filter}//g;
     }
 
     my $upload_info = $cgi->uploadInfo( $remote_filename );
@@ -241,16 +253,32 @@ the plugin will store uploaded files. B<Defaults to:> C<zofcms_upload>
 =head3 C<name>
 
     { name => 'foos', }
+    
+    { name => '[rand]', }
+    
+    { name => \1 } # any scalar ref
+    
+    {
+        name => sub {
+            my ( $t, $q, $config ) = @_;
+            return 'file_name.png';
+        },
+    }
 
 B<Optional>. Specifies the name (without the extension)
 of the local file into which save the uploaded file. Special value of
 C<[rand]> specifies that the name should be random, in which case it
 will be created by calling C<rand()> and C<time()> and removing any dots
-from the concatenation of those two. The C<name> parameter can also take a subref, if
-that's the case, then the C<name> parameter will obtain its value from the
-return value of that subref. The subref's C<@_> will contain the following (in that
-order): ZofCMS Template hashref, hashref of query parameters and L<App::ZofCMS::Config>
-object. B<Defaults to:> C<[rand]>
+from the concatenation of those two. If a I<scalarref> is specified
+(irrelevant of its value), the plugin will use the filename that the
+browser gave it (relying on L<File::Spec::Functions>'s
+C<splitpath> here; also, note that extension will be obtained
+using C<ext> argument (see below). The C<name> parameter can also take
+a subref, if that's the case, then the C<name> parameter will obtain
+its value from the return value of that subref. The subref's C<@_> will
+contain the following (in that order): ZofCMS Template hashref, hashref
+of query parameters and L<App::ZofCMS::Config> object.
+B<Defaults to:> C<[rand]>
 
 =head3 C<ext>
 
@@ -260,6 +288,15 @@ B<Optional>. Specifies the extension to use for the name of local file
 into which the upload will be stored. B<By default> is not specified
 and therefore the extension will be obtained from the name of the remote
 file.
+
+=head3 C<name_filter>
+
+    { name_filter => qr/Z(?!ofcms)/i, }
+
+B<Optional>. Takes a regex ref (C<qr//>) as a value. Anything
+in the C<path> + C<name> + C<ext> final string (regardles of how each
+of those is obtained) that matches this regex
+will be stripped. B<By default> is not specified.
 
 =head3 C<content_type>
 
