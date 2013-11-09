@@ -13,7 +13,9 @@ my $builder = Module::Build->new(
     requires => {
         'File::Spec::Functions' => 3.2701,
         'App::ZofCMS'           => 0.0104,
+        perl => '5.006',
     },
+    configure_requires => { 'Module::Build' => 0 },
     add_to_cleanup      => [ 'App-ZofCMS-Plugin-FileUpload-*' ],
     create_makefile_pl => 'traditional',
 );

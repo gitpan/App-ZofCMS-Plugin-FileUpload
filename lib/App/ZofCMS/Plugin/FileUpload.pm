@@ -3,9 +3,9 @@ package App::ZofCMS::Plugin::FileUpload;
 use warnings;
 use strict;
 
-our $VERSION = '0.0114';
+our $VERSION = '0.0115';
 
-use File::Spec::Functions qw/catfile  splitpath/;
+use File::Spec::Functions (qw/catfile  splitpath/);
 
 sub new { bless {}, shift }
 
@@ -149,6 +149,8 @@ sub _process_upload {
 
 1;
 __END__
+
+=encoding utf8
 
 =head1 NAME
 
